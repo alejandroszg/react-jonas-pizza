@@ -58,29 +58,36 @@ function App() {
 
 function Header() {
   return (
-    <header className="header">
+    <header className="header footer">
       <h1>Fast React Pizza Co.</h1>
     </header>
   );
 }
 
 function Menu() {
+  const pizzas = pizzaData;
+
+  const numPizzas = pizzas.length;
+
   return (
     <main className="menu">
       <h2>Our menu</h2>
-      <Pizza
-        name="Pizza Prosciutto"
-        ingredients="Tomato, mozarella, ham, aragula, and burrata cheese"
-        photoName="pizzas/prosciutto.jpg"
-        price={10}
-      />
 
-      <Pizza
-        name="Pizza Funghi"
-        ingredients="Tomato, mushrooms"
-        photoName="pizzas/funghi.jpg"
-        price={12}
-      />
+      {numPizzas > 0 ? (
+        <ul className="pizzas">
+          {pizzas.map((pizza) => (
+            <Pizza
+              photoName={pizza.photoName}
+              name={pizza.name}
+              ingredients={pizza.ingredients}
+              price={pizza.price}
+              key={pizza.name}
+            />
+          ))}
+        </ul>
+      ) : (
+        <p>We're still working on our menu. Please come back later :)</p>
+      )}
     </main>
   );
 }
@@ -88,14 +95,14 @@ function Menu() {
 function Pizza(props) {
   const { photoName, name, ingredients, price } = props;
   return (
-    <div className="pizza">
+    <li className="pizza">
       <img src={photoName} alt={name}></img>
       <div>
         <h3>{name}</h3>
         <p>{ingredients}</p>
         <span>{price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -107,8 +114,17 @@ function Footer() {
   console.log(isOpen);
 
   return (
-    <footer className="footere">
-      {new Date().toLocaleTimeString()} - We're currently open
+    <footer className="footer">
+      {isOpen ? (
+        <div className="order">
+          <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+          <button className="btn">Order</button>
+        </div>
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour}:00. and {closeHour}:00.
+        </p>
+      )}
     </footer>
   );
   // without JSX
